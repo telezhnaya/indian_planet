@@ -109,6 +109,11 @@ public class CompareRowImpl implements ICompareRow {
 					currentCorrelation = correlation;
 				}
 			}
+			CorrelationResultIndex lastIndex = new CorrelationResultIndex();
+			lastIndex.correlation = getMaxCorrelation(first.subList(startBlock, first.size()), second.subList(startBlock, second.size()));
+			lastIndex.startIndex = String.valueOf(startBlock);
+			lastIndex.endIndex = String.valueOf(first.size() - 1);
+			result.add(lastIndex);
 			return grow(mergef(result));
 		}
 
@@ -272,20 +277,37 @@ public class CompareRowImpl implements ICompareRow {
 
 	public CorrelationResultIndex executeTest1(URL resource) {
 		ArrayPair pair = getNumbers(resource);
-		CorrelationResultIndex index = new CorrelationResultIndex();
-		index.correlation = pair.getPearsonsCorrelation();
-		return index;
+		List<CorrelationResultIndex> result = pair.getCorrelations();
+		for (CorrelationResultIndex t : result) {
+			System.out.println("start: " + t.startIndex);
+			System.out.println("end: " + t.endIndex);
+			System.out.println("corr: " + t.correlation);
+			System.out.println("===================================");
+		}
+		return null;
 	}
 
 	public CorrelationResultIndex executeTest2(URL resource) {
 		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
+		List<CorrelationResultIndex> result = pair.getCorrelations();
+		for (CorrelationResultIndex t : result) {
+			System.out.println("start: " + t.startIndex);
+			System.out.println("end: " + t.endIndex);
+			System.out.println("corr: " + t.correlation);
+			System.out.println("===================================");
+		}
 		return null;
 	}
 
 	public CorrelationResultIndex executeTest3(URL resource) {
 		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
+		List<CorrelationResultIndex> result = pair.getCorrelations();
+		for (CorrelationResultIndex t : result) {
+			System.out.println("start: " + t.startIndex);
+			System.out.println("end: " + t.endIndex);
+			System.out.println("corr: " + t.correlation);
+			System.out.println("===================================");
+		}
 		return null;
 	}
 
