@@ -1,6 +1,5 @@
 package com.atc.javacontest;
 
-import com.sun.xml.bind.annotation.OverrideAnnotationOf;
 import org.apache.commons.math3.util.Pair;
 
 import java.util.ArrayDeque;
@@ -9,46 +8,56 @@ import java.util.Deque;
 /**
  * Created by Sergey on 08.03.16.
  */
-public class DequePair<T> extends CollectionPair<T> {
+public class DequePair extends CollectionPair {
 
-    public Deque<T> first;
-    public Deque<T> second;
+    public Deque<Double> first;
+    public Deque<Double> second;
 
-    public DequePair(Deque<T> first, Deque<T> second) {
+    public DequePair(Deque<Double> first, Deque<Double> second) {
         this.first = first;
         this.second = second;
     }
 
-    public DequePair(CollectionPair<T> pair) {
+    public DequePair(CollectionPair pair) {
         this.first = new ArrayDeque<>(pair.getFirst());
         this.second = new ArrayDeque<>(pair.getSecond());
     }
 
     @Override
-    public Deque<T> getFirst() {
+    public Deque<Double> getFirst() {
         return first;
     }
 
     @Override
-    public Deque<T> getSecond() {
+    public Deque<Double> getSecond() {
         return second;
     }
 
-    public void addLast(T f, T s) {
+    @Override
+    public ListPair toListPair() {
+        return new ListPair(this);
+    }
+
+    @Override
+    public DequePair toDequePair() {
+        return this;
+    }
+
+    public void addLast(Double f, Double s) {
         first.addLast(f);
         second.addLast(s);
     }
 
-    public void addFirst(T f, T s) {
+    public void addFirst(Double f, Double s) {
         first.addFirst(f);
         second.addFirst(s);
     }
 
-    public Pair<T, T> pollFirst() {
+    public Pair<Double, Double> pollFirst() {
         return Pair.create(first.pollFirst(), second.pollFirst());
     }
 
-    public Pair<T, T> pollLast() {
+    public Pair<Double, Double> pollLast() {
         return Pair.create(first.pollLast(), second.pollLast());
     }
 
