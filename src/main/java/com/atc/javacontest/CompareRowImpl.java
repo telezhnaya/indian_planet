@@ -1,11 +1,5 @@
 package com.atc.javacontest;
 
-import org.apache.commons.collections.ArrayStack;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
-import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
-import org.apache.commons.math3.stat.correlation.KendallsCorrelation;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -21,73 +15,34 @@ public class CompareRowImpl implements ICompareRow {
 		public final ArrayList<Double> second;
 
 		public ArrayPair(ArrayList<Double> first, ArrayList<Double> second) {
-			this.first = first;
-			this.second = second;
-		}
+            this.first = first;
+            this.second = second;
+        }
 
-		private double[] toPrimitive(Collection<Double> list) {
-			return ArrayUtils.toPrimitive(list.toArray(new Double[list.size()]));
-		}
+        public double getCorrelation(int start, int finish) {
+            return Correlation.getMaxCorrelation(first.subList(start, finish), second.subList(start, finish));
+        }
 
-		public double[] firstToArray() {
-			return toPrimitive(first);
-		}
+        public double getAbsCorrelation(int start, int finish) {
+            return Math.abs(getCorrelation(start, finish));
+        }
 
-		public double[] secondToArray() {
-			return toPrimitive(second);
-		}
-
-		public double getPearsonsCorrelation(Collection<Double> f, Collection<Double> s) {
-			return new PearsonsCorrelation().correlation(toPrimitive(f), toPrimitive(s));
-		}
-
-		public double getSpearmansCorrelation(Collection<Double> f, Collection<Double> s) {
-			return new SpearmansCorrelation().correlation(toPrimitive(f), toPrimitive(s));
-		}
-
-		public double getKendallsCorrelation(Collection<Double> f, Collection<Double> s) {
-			return new KendallsCorrelation().correlation(toPrimitive(f), toPrimitive(s));
-		}
-
-		public double getPearsonsCorrelation() {
-			return new PearsonsCorrelation().correlation(firstToArray(), secondToArray());
-		}
-
-		public double getSpearmansCorrelation() {
-			return new SpearmansCorrelation().correlation(firstToArray(), secondToArray());
-		}
-
-		public double getKendallsCorrelation() {
-			return new KendallsCorrelation().correlation(firstToArray(), secondToArray());
-		}
-
-		public double getMaxCorrelation(Collection<Double> f, Collection<Double> s) {
-			double a = getKendallsCorrelation(f, s);
-			double b = getKendallsCorrelation(f, s);
-			double c = getKendallsCorrelation(f, s);
-			return Math.max(a, Math.max(b, c));
-		}
-
-		public void printStats() {
-			System.out.println(getKendallsCorrelation());
-			System.out.println(getPearsonsCorrelation());
-			System.out.println(getSpearmansCorrelation());
-		}
+		final int piece = 2;
 
 		public List<CorrelationResultIndex> getCorrelations() {
 			List<CorrelationResultIndex> result = new ArrayList<>();
-			Deque<Double> ascendingFirst = new ArrayDeque<>(first.subList(0, 5));
-			Deque<Double> ascendingSecond = new ArrayDeque<>(second.subList(0, 5));
-			double currentCorrelation = getMaxCorrelation(ascendingFirst, ascendingSecond);
+			Deque<Double> ascendingFirst = new ArrayDeque<>(first.subList(0, piece));
+			Deque<Double> ascendingSecond = new ArrayDeque<>(second.subList(0, piece));
+			double currentCorrelation = Correlation.getMaxCorrelation(ascendingFirst, ascendingSecond);
 			int startBlock = 0;
 			for (int i = 5; i < first.size(); i++) {
 				ascendingFirst.removeFirst();
 				ascendingSecond.removeFirst();
 				ascendingFirst.addLast(first.get(i));
 				ascendingSecond.addLast(second.get(i));
-				double correlation = getMaxCorrelation(ascendingFirst, ascendingSecond);
+				double correlation = Correlation.getMaxCorrelation(ascendingFirst, ascendingSecond);
 				if (Math.abs(currentCorrelation - correlation) > 0.4) { // Fucking magic!
-					double blockCorrelation = getMaxCorrelation(first.subList(startBlock, i), second.subList(startBlock, i));
+					double blockCorrelation = Correlation.getMaxCorrelation(first.subList(startBlock, i), second.subList(startBlock, i));
 					if (Math.abs(blockCorrelation) >= 0.3) {
 						CorrelationResultIndex index = new CorrelationResultIndex();
 						index.correlation = blockCorrelation;
@@ -102,47 +57,19 @@ public class CompareRowImpl implements ICompareRow {
 					startBlock = i;
 					ascendingFirst.clear();
 					ascendingSecond.clear();
-					ascendingFirst.addAll(first.subList(i - 1, i + 5));
-					ascendingSecond.addAll(second.subList(i - 1, i + 5));
-					i += 5;
+					ascendingFirst.addAll(first.subList(i - 1, i + piece <= 1000 ? i + piece : 1000));
+					ascendingSecond.addAll(second.subList(i - 1, i + piece <= 1000 ? i + piece : 1000));
+					i += piece;
 				} else {
 					currentCorrelation = correlation;
 				}
 			}
 			CorrelationResultIndex lastIndex = new CorrelationResultIndex();
-			lastIndex.correlation = getMaxCorrelation(first.subList(startBlock, first.size()), second.subList(startBlock, second.size()));
+			lastIndex.correlation = Correlation.getMaxCorrelation(first.subList(startBlock, first.size()), second.subList(startBlock, second.size()));
 			lastIndex.startIndex = String.valueOf(startBlock);
 			lastIndex.endIndex = String.valueOf(first.size() - 1);
 			result.add(lastIndex);
-			return grow(mergef(result));
-		}
-
-		public List<CorrelationResultIndex> merge(List<CorrelationResultIndex> draftCorrelations) {
-			List<CorrelationResultIndex> result = new ArrayList<>();
-			for (int i = 0; i < draftCorrelations.size() - 1; i++) {
-				CorrelationResultIndex firstIndex = draftCorrelations.get(i);
-				CorrelationResultIndex secondIndex = draftCorrelations.get(i + 1);
-				int firstStartIndex = Integer.parseInt(firstIndex.startIndex);
-				int secondStartIndex = Integer.parseInt(secondIndex.startIndex);
-				int firstEndIndex = Integer.parseInt(firstIndex.endIndex);
-				int secondEndIndex = Integer.parseInt(secondIndex.endIndex);
-				if (firstEndIndex >= secondStartIndex) {
-					double correlation = getMaxCorrelation(
-							first.subList(firstStartIndex, secondEndIndex),
-							second.subList(firstStartIndex, secondEndIndex)
-					);
-					if (Math.abs(correlation) >= 0.3) {
-						CorrelationResultIndex index = new CorrelationResultIndex();
-						index.correlation = correlation;
-						index.startIndex = String.valueOf(firstStartIndex);
-						index.endIndex = String.valueOf(secondEndIndex);
-						result.add(index);
-					} else {
-						result.add(firstIndex);
-					}
-				}
-			}
-			return result;
+			return mergef(result);
 		}
 
 		public List<CorrelationResultIndex> mergef(List<CorrelationResultIndex> draft) {
@@ -156,7 +83,7 @@ public class CompareRowImpl implements ICompareRow {
 				int firstEndIndex = Integer.parseInt(firstIndex.endIndex);
 				int secondEndIndex = Integer.parseInt(secondIndex.endIndex);
 				if (firstEndIndex >= secondStartIndex) {
-					double correlation = getMaxCorrelation(
+					double correlation = Correlation.getMaxCorrelation(
 							first.subList(firstStartIndex, secondEndIndex),
 							second.subList(firstStartIndex, secondEndIndex)
 					);
@@ -195,7 +122,7 @@ public class CompareRowImpl implements ICompareRow {
 			int end = Integer.parseInt(index.endIndex);
 			double correlation = 0.0;
 			for (; start > 0; start--) {
-				double ncorrelation = getMaxCorrelation(first.subList(start, end), second.subList(start, end));
+				double ncorrelation = Correlation.getMaxCorrelation(first.subList(start, end), second.subList(start, end));
 				if (Math.abs(ncorrelation) < 0.3) { // FIXME: 05.03.16
 					start += 1;
 					break;
@@ -215,7 +142,7 @@ public class CompareRowImpl implements ICompareRow {
 			int end = Integer.parseInt(index.endIndex);
 			double correlation = 0.0;
 			for (; end < first.size(); end++) {
-				double ncorrelation = getMaxCorrelation(first.subList(start, end), second.subList(start, end));
+				double ncorrelation = Correlation.getMaxCorrelation(first.subList(start, end), second.subList(start, end));
 				if (Math.abs(ncorrelation) < 0.3) { // FIXME: 05.03.16
 					end -= 1;
 					break;
@@ -312,50 +239,80 @@ public class CompareRowImpl implements ICompareRow {
 	}
 
 	public CorrelationResultIndex executeTest4(URL resource) {
-		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
-		return null;
+        ArrayPair pair = getNumbers(resource);
+        List<CorrelationResultIndex> result = pair.getCorrelations();
+        for (CorrelationResultIndex t : result) {
+            System.out.println("start: " + t.startIndex);
+            System.out.println("end: " + t.endIndex);
+            System.out.println("corr: " + t.correlation);
+            System.out.println("===================================");
+        }
+        return null;
 	}
 
 	public CorrelationResultIndex executeTest5(URL resource) {
-		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
-		return null;
+        ArrayPair pair = getNumbers(resource);
+        List<CorrelationResultIndex> result = pair.getCorrelations();
+        for (CorrelationResultIndex t : result) {
+            System.out.println("start: " + t.startIndex);
+            System.out.println("end: " + t.endIndex);
+            System.out.println("corr: " + t.correlation);
+            System.out.println("===================================");
+        }
+        return null;
 	}
 
 	public CorrelationResultIndex executeTest6(URL resource) {
-		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
-		return null;
+        ArrayPair pair = getNumbers(resource);
+        List<CorrelationResultIndex> result = pair.getCorrelations();
+        for (CorrelationResultIndex t : result) {
+            System.out.println("start: " + t.startIndex);
+            System.out.println("end: " + t.endIndex);
+            System.out.println("corr: " + t.correlation);
+            System.out.println("===================================");
+        }
+        return null;
 	}
 
 	public CorrelationResultIndex executeTest7(URL resource) {
-		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
-		return null;
+        ArrayPair pair = getNumbers(resource);
+        List<CorrelationResultIndex> result = pair.getCorrelations();
+        for (CorrelationResultIndex t : result) {
+            System.out.println("start: " + t.startIndex);
+            System.out.println("end: " + t.endIndex);
+            System.out.println("corr: " + t.correlation);
+            System.out.println("===================================");
+        }
+        return null;
 	}
 
 	public CorrelationResultIndex executeTest8(URL resource) {
-		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
-		return null;
+        ArrayPair pair = getNumbers(resource);
+        List<CorrelationResultIndex> result = pair.getCorrelations();
+        for (CorrelationResultIndex t : result) {
+            System.out.println("start: " + t.startIndex);
+            System.out.println("end: " + t.endIndex);
+            System.out.println("corr: " + t.correlation);
+            System.out.println("===================================");
+        }
+        return null;
 	}
 
 	public CorrelationResultIndex executeTest9(URL resource) {
-		ArrayPair pair = getNumbers(resource);
-		pair.printStats();
-		return null;
+        ArrayPair pair = getNumbers(resource);
+        List<CorrelationResultIndex> result = pair.getCorrelations();
+        for (CorrelationResultIndex t : result) {
+            System.out.println("start: " + t.startIndex);
+            System.out.println("end: " + t.endIndex);
+            System.out.println("corr: " + t.correlation);
+            System.out.println("===================================");
+        }
+        return null;
 	}
 
 	public List<CorrelationResultIndex> executeTest10(URL resource) {
 		ArrayPair pair = getNumbers(resource);
 		List<CorrelationResultIndex> result = pair.getCorrelations();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
 		return null;
 	}
 
