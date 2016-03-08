@@ -48,9 +48,17 @@ public class DequePair extends CollectionPair {
         second.addLast(s);
     }
 
+    public void addLast(Pair<Double, Double> pair) {
+        addLast(pair.getFirst(), pair.getSecond());
+    }
+
     public void addFirst(Double f, Double s) {
         first.addFirst(f);
         second.addFirst(s);
+    }
+
+    public void addFirst(Pair<Double, Double> pair) {
+        addFirst(pair.getFirst(), pair.getSecond());
     }
 
     public Pair<Double, Double> pollFirst() {

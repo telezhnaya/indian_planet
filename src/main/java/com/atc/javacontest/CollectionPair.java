@@ -16,6 +16,16 @@ public abstract class CollectionPair {
         return getFirst().size();
     }
 
+    public void clear() {
+        getFirst().clear();
+        getSecond().clear();
+    }
+
+    public void addAll(CollectionPair pair) {
+        getFirst().addAll(pair.getFirst());
+        getSecond().addAll(pair.getSecond());
+    }
+
     public double getCorrelation() {
         return Correlation.getMaxCorrelation(getFirst(), getSecond());
     }

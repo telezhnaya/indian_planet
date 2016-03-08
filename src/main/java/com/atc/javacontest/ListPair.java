@@ -1,5 +1,7 @@
 package com.atc.javacontest;
 
+import org.apache.commons.math3.util.Pair;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.net.URISyntaxException;
@@ -41,6 +43,10 @@ public class ListPair extends CollectionPair {
         return second;
     }
 
+    public ListPair subList(int start, int finish) {
+        return new ListPair(first.subList(start, finish), second.subList(start, finish));
+    }
+
     public double getCorrelation(int start, int finish) {
         return Correlation.getMaxCorrelation(
                 first.subList(start, finish),
@@ -64,6 +70,40 @@ public class ListPair extends CollectionPair {
     public DequePair toDequePair() {
         return new DequePair(this);
     }
+
+    public Pair<Double, Double> get(int index) {
+        return Pair.create(first.get(index), second.get(index));
+    }
+
+    private List<CorrelationBlock> getBlocks(int piece, int correlationDiff, int correlationBound) {
+        List<CorrelationBlock> result = new ArrayList<>();
+        DequePair ascending = new DequePair(subList(0, piece));
+        double currentCorrelation = ascending.getAbsCorrelation();
+        int startBlock = 0;
+        for (int i = piece; i < size(); i++) {
+            ascending.pollFirst();
+            ascending.addLast(get(i));
+            double correlation = ascending.getAbsCorrelation();
+            if (Math.abs(correlation - currentCorrelation) > correlationDiff) {
+                double blockCorrelation = getAbsCorrelation(startBlock, i);
+                if (blockCorrelation >= correlationBound) {
+                    CorrelationBlock block = new CorrelationBlock(blockCorrelation, startBlock, i);
+                    result.add(block);
+                    block.printlnStats();
+                }
+                startBlock = i;
+                ascending.clear();
+                i = i + piece < size() ? i + piece : size();
+                ascending.addAll(subList(i - 6, i - 1));
+            } else {
+                currentCorrelation = correlation;
+            }
+        }
+        result.add(new CorrelationBlock(ascending.getAbsCorrelation(), startBlock, size()));
+        return result;
+    }
+
+    
 
     public static CollectionPair fromResource(URL resource) {
         try {
