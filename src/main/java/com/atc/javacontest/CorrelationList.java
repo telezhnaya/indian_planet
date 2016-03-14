@@ -67,6 +67,11 @@ public class CorrelationList {
         return result;
     }
 
+    public CorrelationResultIndex getCorrelationResultIndex() {
+        double correlation = Correlation.getCorrelation(first, second);
+        return buildCorrelationResultIndex(correlation, 0, first.size());
+    }
+
     private CorrelationResultIndex unionOrPush(CorrelationResultIndex first, CorrelationResultIndex second, List<CorrelationResultIndex> pushing) {
         if (first == null) {
             return second;

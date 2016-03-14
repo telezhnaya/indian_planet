@@ -36,102 +36,84 @@ public class CompareRowImpl implements ICompareRow {
 	}
 
 	public CorrelationResultIndex executeTest1(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest2(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest3(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest4(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest5(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest6(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest7(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest8(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("===================================");
+		return result;
 	}
 
 	public CorrelationResultIndex executeTest9(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
+		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
+			System.out.println("start: " + result.startIndex);
+			System.out.println("end: " + result.endIndex);
+			System.out.println("corr: " + result.correlation);
 			System.out.println("===================================");
-		}
-		return null;
+		return result;
 	}
 
 	public List<CorrelationResultIndex> executeTest10(URL resource) {
@@ -142,18 +124,18 @@ public class CompareRowImpl implements ICompareRow {
 			System.out.println("corr: " + t.correlation);
 			System.out.println("===================================");
 		}
-		return null;
+		return result;
 	}
 
 	public List<CorrelationResultIndex> executeTest11(URL resource) {
-		List<CorrelationResultIndex> result = new CorrelationList(resource).getCorrelationResultIndexes();
+		List<CorrelationResultIndex> result = new CorrelationList(resource, ",").getCorrelationResultIndexes();
 		for (CorrelationResultIndex t : result) {
 			System.out.println("start: " + t.startIndex);
 			System.out.println("end: " + t.endIndex);
 			System.out.println("corr: " + t.correlation);
 			System.out.println("===================================");
 		}
-		return null;
+		return result;
 	}
 
 
