@@ -69,7 +69,7 @@ public class CorrelationList {
 
     public CorrelationResultIndex getCorrelationResultIndex() {
         double correlation = Correlation.getCorrelation(first, second);
-        return buildCorrelationResultIndex(correlation, 0, first.size());
+        return partiallyBuildLagIndex(buildCorrelationResultIndex(correlation, 0, first.size()));
     }
 
     private CorrelationResultIndex unionOrPush(CorrelationResultIndex first, CorrelationResultIndex second, List<CorrelationResultIndex> pushing) {
@@ -81,7 +81,7 @@ public class CorrelationList {
             if (getStart(second) <= getEnd(first)) {
                 return buildCorrelationResultIndex(getStart(first), getEnd(second));
             } else {
-                pushing.add(first);
+                pushing.add(buildLagIndex(first));
                 return second;
             }
         }
@@ -109,6 +109,38 @@ public class CorrelationList {
         index.correlation = correlation;
         index.startIndex = String.valueOf(start);
         index.endIndex = String.valueOf(end);
+        return index;
+    }
+
+    private CorrelationResultIndex partiallyBuildLagIndex(CorrelationResultIndex index) {
+        int blocks_count = (getEnd(index) - getStart(index)) / 50;
+        double average = 0.0;
+        for (int i = 0; i < blocks_count; i++) {
+            average += getLagIndex(i * 50, (i * 50) + 50);
+        }
+        index.correlationLagIndex = average / blocks_count;
+        return index;
+    }
+
+    private double getLagIndex(int start, int end) {
+        int best_lag = 0;
+        List<Double> lags = new ArrayList<>(end - start);
+        for (int i = 0; i < end - start; i++) {
+            lags.add(i, 0.0);
+        }
+        for (int i = 0; i < end - start; i++) {
+            for (int k = start; k < end; k++) {
+                lags.set(i, lags.get(i) + first.get(k) * (second.get((i + k) % (end - start))));
+            }
+            if (lags.get(best_lag) < lags.get(i)) {
+                best_lag = i;
+            }
+        }
+        return lags.get(best_lag);
+    }
+
+    private CorrelationResultIndex buildLagIndex(CorrelationResultIndex index) {
+        index.correlationLagIndex = getLagIndex(getStart(index), getEnd(index));
         return index;
     }
 
