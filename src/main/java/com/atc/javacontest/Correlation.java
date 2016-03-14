@@ -6,44 +6,37 @@ import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 
 import java.util.Collection;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Sergey on 08.03.16.
  */
-public enum Correlation {
-    KENDALL {
-        @Override
-        public double getCorrelation(Collection<Double> first, Collection<Double> second) {
-            return new KendallsCorrelation().correlation(toPrimitive(first), toPrimitive(second));
-        }
-    },
-    SPEARMAN {
-        @Override
-        public double getCorrelation(Collection<Double> first, Collection<Double> second) {
-            return new SpearmansCorrelation().correlation(toPrimitive(first), toPrimitive(second));
-        }
-    },
-    PEARSON {
-        @Override
-        public double getCorrelation(Collection<Double> first, Collection<Double> second) {
-            return new PearsonsCorrelation().correlation(toPrimitive(first), toPrimitive(second));
-        }
-    };
+class Correlation {
 
-    public abstract double getCorrelation(Collection<Double> first, Collection<Double> second);
+    static KendallsCorrelation kendallsCorrelation = new KendallsCorrelation();
+    static SpearmansCorrelation spearmansCorrelation = new SpearmansCorrelation();
+    static PearsonsCorrelation pearsonsCorrelation = new PearsonsCorrelation();
 
-    private static double[] toPrimitive(Collection<Double> list) {
-        return ArrayUtils.toPrimitive(list.toArray(new Double[list.size()]));
+    static double getCorrelation(Collection<Double> first, Collection<Double> second) {
+        int size = first.size();
+        double[] firstArray = new double[size];
+        double[] secondArray = new double[size];
+        Iterator<Double> first_iter = first.iterator();
+        Iterator<Double> second_iter = second.iterator();
+        for (int i = 0; i < size; i++) {
+            firstArray[i] = first_iter.next();
+            secondArray[i] = second_iter.next();
+        }
+        return getCorrelation(firstArray, secondArray);
     }
 
-    public static double getMaxCorrelation(Collection<Double> first, Collection<Double> second) {
-        double a = KENDALL.getCorrelation(first, second);
-        double b = SPEARMAN.getCorrelation(first, second);
-        double c = PEARSON.getCorrelation(first, second);
-        return Math.max(a, Math.max(b, c));
-    }
-
-    public static double getMaxAbsCorrelation(Collection<Double> first, Collection<Double> second) {
-        return Math.abs(getMaxCorrelation(first, second));
+    static double getCorrelation(double[] first, double[] second) {
+        return Math.max(kendallsCorrelation.correlation(first, second),
+                Math.max(spearmansCorrelation.correlation(first, second),
+                        pearsonsCorrelation.correlation(first, second)
+                )
+        );
     }
 }
