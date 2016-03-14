@@ -238,13 +238,13 @@ public class ListPair extends CollectionPair {
     }
     
 
-    public static CollectionPair fromResource(URL resource) {
+    public static ListPair fromResource(URL resource, String separator) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(resource.toURI()), StandardCharsets.UTF_8);
             List<Double> first = new ArrayList<>();
             List<Double> second = new ArrayList<>();
             for (String line : lines) {
-                String[] splatted = line.split(";");
+                String[] splatted = line.split(separator);
                 first.add(Double.parseDouble(splatted[1].replace(',', '.')));
                 second.add(Double.parseDouble(splatted[2].replace(',', '.')));
             }
@@ -253,5 +253,9 @@ public class ListPair extends CollectionPair {
             e.printStackTrace();
         }
         return new ListPair();
+    }
+
+    public static ListPair fromResource(URL resource) {
+        return fromResource(resource, ";");
     }
 }
