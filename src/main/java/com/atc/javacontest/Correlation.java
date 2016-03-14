@@ -44,6 +44,9 @@ public enum Correlation {
     }
 
     public static double getMaxAbsCorrelation(Collection<Double> first, Collection<Double> second) {
-        return Math.abs(getMaxCorrelation(first, second));
+        double a = Math.abs(KENDALL.getCorrelation(first, second));
+        double b = Math.abs(SPEARMAN.getCorrelation(first, second));
+        double c = Math.abs(PEARSON.getCorrelation(first, second));
+        return Math.max(a, Math.max(b, c));
     }
 }
