@@ -57,6 +57,7 @@ public class CorrelationBlock {
         System.out.print("start: " + start);
         System.out.print(", end: " + end);
         System.out.print(", lag: " + correlationLagIndex);
+        System.out.print(", mult: " + correlationMutipleIndex);
         System.out.println(", corr: " + correlation);
     }
 }
