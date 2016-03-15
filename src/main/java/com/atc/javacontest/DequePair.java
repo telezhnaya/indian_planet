@@ -8,6 +8,11 @@ import java.util.Deque;
 /**
  * Created by Sergey on 08.03.16.
  */
+
+/**
+ * Класс для представления двух деков
+ *
+ */
 public class DequePair extends CollectionPair {
 
     public Deque<Double> first;

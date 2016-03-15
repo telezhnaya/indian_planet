@@ -3,6 +3,11 @@ package com.atc.javacontest;
 /**
  * Created by Sergey on 08.03.16.
  */
+
+/**
+ * Класс для представления блока(промежутка) корреляции
+ * Используется, так как предназначенный для этого класс CorrelationResultIndex не является достаточно удобным
+ */
 public class CorrelationBlock {
     /*
 	 * коэффициент корреляции между рядами от -1 до 1

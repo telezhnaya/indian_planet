@@ -6,6 +6,11 @@ import java.util.Collection;
  * Created by Sergey on 08.03.16.
  */
 
+/**
+ * Общий предок ListPair и DequePair.
+ * В данной задаче на данный момент является бесполезным.
+ * При дальнейшем расширении может быть полезным.
+ */
 public abstract class CollectionPair {
 
     public abstract Collection<Double> getFirst();

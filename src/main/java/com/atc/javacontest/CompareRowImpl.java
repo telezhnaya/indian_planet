@@ -10,12 +10,24 @@ import java.util.*;
 
 public class CompareRowImpl implements ICompareRow {
 
+    /**
+     * Метод для вычисления первых тестов
+     * /offtop: Для последних двух также возвращает приемлимый результат
+     * @param resource Данные
+     * @return Возвращает промежуток корреляции
+     */
     private CorrelationResultIndex executeFirstTests(URL resource) {
         CorrelationBlock block = ListPair.fromResource(resource).getListCorrelation();
         block.printStats();
         return block.toResultIndex();
     }
 
+    /**
+     * Метод для вычисления последних двух тестов
+     * @param resource Данные
+     * @param separator Разделитель в данных
+     * @return Возвращает список промежутков корреляции
+     */
     private List<CorrelationResultIndex> executeLatterTests(URL resource, String separator) {
         List<CorrelationBlock> blocks = ListPair.fromResource(resource, separator).toListPair().getListCorrelations();
         List<CorrelationResultIndex> indices = new ArrayList<>(blocks.size());
