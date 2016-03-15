@@ -140,13 +140,6 @@ public class CorrelationList {
         return index;
     }
 
-    private List<CorrelationResultIndex> getLagIndexes(List<CorrelationResultIndex> indexes) {
-        for (CorrelationResultIndex index : indexes) {
-            index = getLagIndex(index);
-        }
-        return indexes;
-    }
-
     private int getStart(CorrelationResultIndex index) {
         return Integer.parseInt(index.startIndex);
     }
