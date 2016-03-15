@@ -1,9 +1,5 @@
 package com.atc.javacontest;
 
-import edu.mines.jtk.dsp.LocalCorrelationFilter;
-import org.apache.commons.configuration.SystemConfiguration;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.commons.math3.util.Pair;
 
 import java.io.IOException;
@@ -13,7 +9,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -140,110 +135,41 @@ public class ListPair extends CollectionPair {
         return merged;
     }
 
-    private List<CorrelationBlock> getLagIndices(List<CorrelationBlock> blocks) {
-        for (CorrelationBlock block : blocks) {
-            int bestLag = 0;
-            List<Double> diffs = new ArrayList<>(block.end - block.start);
-            for (int i = 0; i < block.end - block.start; i++) {
-                diffs.add(i, 0.0);
-            }
-            for (int i = 0; i < block.end - block.start; i++) {
-                for (int k = block.start; k < block.end; k++) {
-                    diffs.add(i, diffs.get(i) + first.get(k) * (second.get((i + k) % (block.end - block.start))));
-                }
-                if (diffs.get(bestLag) < diffs.get(i)) {
-                    bestLag = i;
-                }
-            }
-            block.correlationLagIndex = bestLag;
-        }
-        return blocks;
-    }
-
     public CorrelationBlock getListCorrelation() {
         CorrelationBlock block = new CorrelationBlock(getCorrelation(), 0, size());
-        block.correlationLagIndex = getCorrLagManual(0, block.end);
-        return block;
+        return getLagIndex(block);
     }
 
     public List<CorrelationBlock> getListCorrelations() {
         int piece = 5;
         double diff = 0.5;
         double bound = 0.3;
-        return (getManualBlocks(merge(getBlocks(piece, diff, bound))));
+        return (getLagIndices(merge(getBlocks(piece, diff, bound))));
     }
 
-    private double getCorrLagManual(int start, int end) {
-        List<Double> firstSub = first.subList(start, end);
-        int bestLag = 0;
-        double bestCorrelation = Correlation.getMaxAbsCorrelation(firstSub, second.subList(start, end));
-        for (int i = 0; i < end - start; i += (end - start)/50 + 1) {
-            List<Double> secondSub = second.subList(i + start, i + end > size() ? size() : i + end);
+    private CorrelationBlock getLagIndex(CorrelationBlock block) {
+        List<Double> firstSub = first.subList(block.start, block.end);
+        double bestCorrelation = block.correlation;
+        for (int i = 0; i < block.end - block.start; i += (block.end - block.start)/50 + 1) {
+            List<Double> secondSub = second.subList(i + block.start, i + block.end > size() ? size() : i + block.end);
             for (int j = secondSub.size(); j < firstSub.size(); j++) {
                 secondSub.add(0.0);
             }
             double correlation = Correlation.getMaxAbsCorrelation(firstSub, secondSub);
             if (correlation > bestCorrelation) {
                 bestCorrelation = correlation;
-                bestLag = i;
+                block.correlationLagIndex = i;
             }
         }
-        return bestLag;
+        return block;
     }
 
-    private List<CorrelationBlock> getManualBlocks(List<CorrelationBlock> blocks) {
+    private List<CorrelationBlock> getLagIndices(List<CorrelationBlock> blocks) {
         for (CorrelationBlock block : blocks) {
-            block.correlationLagIndex = getCorrLagManual(block.start, block.end);
+            block = getLagIndex(block);
         }
         return blocks;
     }
-
-    private double getAutoCorrLag(int start, int end) {
-        LocalCorrelationFilter filter = new LocalCorrelationFilter(
-                LocalCorrelationFilter.Type.SIMPLE,
-                LocalCorrelationFilter.Window.GAUSSIAN,
-                2);
-        filter.setInputs(
-                toFloatArray(first, start, end),
-                toFloatArray(second, start, end));
-        double bestCorrelation = getCorrelation(start, end);
-        int bestLag = 0;
-        for (int i = 0; i < end - start; i += ((end - start)/50) + 1) {
-            float[] fl = new float[end - start];
-            filter.correlate(i, fl);
-            filter.normalize(i, fl);
-            double corr = Correlation.getMaxAbsCorrelation(first.subList(start, end), toDoubleList(fl));
-            if (corr > bestCorrelation) {
-                bestCorrelation = corr;
-                bestLag = i;
-            }
-        }
-        return bestLag;
-    }
-
-    private List<CorrelationBlock> getAutoBlocks(List<CorrelationBlock> blocks) {
-        for (CorrelationBlock block : blocks) {
-            block.correlationLagIndex = getAutoCorrLag(block.start, block.end);
-        }
-        return blocks;
-    }
-
-    private List<Double> toDoubleList(float[] array) {
-        ArrayList<Double> result = new ArrayList<>(array.length);
-        for (float a : array) {
-            result.add((double)a);
-        }
-        return result;
-    }
-
-    private float[] toFloatArray(List<Double> list, int start, int end) {
-        float[] result = new float[end - start];
-        for (int i = 0; i < end - start; i++) {
-            result[i] = list.get(i + start).floatValue();
-        }
-        return result;
-    }
-    
 
     public static ListPair fromResource(URL resource, String separator) {
         try {
