@@ -56,6 +56,10 @@ public class ListPair extends CollectionPair {
         );
     }
 
+    public double getCorrelation() {
+        return Correlation.getMaxCorrelation(first, second);
+    }
+
     public double getAbsCorrelation(int start, int finish) {
         return Correlation.getMaxAbsCorrelation(
                 first.subList(start, finish),
@@ -153,7 +157,12 @@ public class ListPair extends CollectionPair {
         return blocks;
     }
 
-    public List<CorrelationBlock> getCorrelations() {
+    public CorrelationBlock getListCorrelation() {
+        CorrelationBlock block = new CorrelationBlock(getCorrelation(), 0, size());
+        return block;
+    }
+
+    public List<CorrelationBlock> getListCorrelations() {
         int piece = 5;
         double diff = 0.4;
         double bound = 0.3;

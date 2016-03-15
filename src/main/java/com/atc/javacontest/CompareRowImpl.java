@@ -10,6 +10,21 @@ import java.util.*;
 
 public class CompareRowImpl implements ICompareRow {
 
+    private CorrelationResultIndex executeFirstTests(URL resource) {
+        CorrelationBlock block = ListPair.fromResource(resource).getListCorrelation();
+        return block.toResultIndex();
+    }
+
+    private List<CorrelationResultIndex> executeLatterTests(URL resource, String separator) {
+        List<CorrelationBlock> blocks = ListPair.fromResource(resource, separator).toListPair().getListCorrelations();
+        List<CorrelationResultIndex> indices = new ArrayList<>(blocks.size());
+        for (CorrelationBlock b : blocks) {
+            b.printStats();
+            indices.add(b.toResultIndex());
+        }
+        return indices;
+    }
+
 	public CorrelationResultIndex executeTest0(URL resource) {
 		CorrelationResultIndex index = new CorrelationResultIndex();
 		try {
@@ -36,85 +51,47 @@ public class CompareRowImpl implements ICompareRow {
 	}
 
 	public CorrelationResultIndex executeTest1(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-		return null;
+		return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest2(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-		return null;
+        return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest3(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-		return null;
+        return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest4(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-        return null;
+        return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest5(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-        return null;
+        return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest6(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-        return null;
+        return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest7(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-        return null;
+        return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest8(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-        return null;
+        return executeFirstTests(resource);
 	}
 
 	public CorrelationResultIndex executeTest9(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-        return null;
+        return executeFirstTests(resource);
 	}
 
 	public List<CorrelationResultIndex> executeTest10(URL resource) {
-		for (CorrelationBlock b : ListPair.fromResource(resource).toListPair().getCorrelations()) {
-			b.printStats();
-		}
-		return null;
+        return executeLatterTests(resource, ";");
 	}
 
 	public List<CorrelationResultIndex> executeTest11(URL resource) {
-		ArrayPair pair = getNumbers(resource);
-		List<CorrelationResultIndex> result = pair.getCorrelations();
-		for (CorrelationResultIndex t : result) {
-			System.out.println("start: " + t.startIndex);
-			System.out.println("end: " + t.endIndex);
-			System.out.println("corr: " + t.correlation);
-			System.out.println("===================================");
-		}
-		return null;
+		return executeLatterTests(resource, ",");
 	}
 
 
