@@ -50,6 +50,7 @@ public class CompareRowImpl implements ICompareRow {
 		System.out.println("start: " + result.startIndex);
 		System.out.println("end: " + result.endIndex);
 		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
 		System.out.println("===================================");
 		return result;
 	}
@@ -59,6 +60,7 @@ public class CompareRowImpl implements ICompareRow {
 		System.out.println("start: " + result.startIndex);
 		System.out.println("end: " + result.endIndex);
 		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
 		System.out.println("===================================");
 		return result;
 	}
@@ -68,6 +70,7 @@ public class CompareRowImpl implements ICompareRow {
 		System.out.println("start: " + result.startIndex);
 		System.out.println("end: " + result.endIndex);
 		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
 		System.out.println("===================================");
 		return result;
 	}
@@ -77,6 +80,7 @@ public class CompareRowImpl implements ICompareRow {
 		System.out.println("start: " + result.startIndex);
 		System.out.println("end: " + result.endIndex);
 		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
 		System.out.println("===================================");
 		return result;
 	}
@@ -86,6 +90,7 @@ public class CompareRowImpl implements ICompareRow {
 		System.out.println("start: " + result.startIndex);
 		System.out.println("end: " + result.endIndex);
 		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
 		System.out.println("===================================");
 		return result;
 	}
@@ -95,6 +100,7 @@ public class CompareRowImpl implements ICompareRow {
 		System.out.println("start: " + result.startIndex);
 		System.out.println("end: " + result.endIndex);
 		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
 		System.out.println("===================================");
 		return result;
 	}
@@ -104,16 +110,18 @@ public class CompareRowImpl implements ICompareRow {
 		System.out.println("start: " + result.startIndex);
 		System.out.println("end: " + result.endIndex);
 		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
 		System.out.println("===================================");
 		return result;
 	}
 
 	public CorrelationResultIndex executeTest9(URL resource) {
 		CorrelationResultIndex result = new CorrelationList(resource).getCorrelationResultIndex();
-			System.out.println("start: " + result.startIndex);
-			System.out.println("end: " + result.endIndex);
-			System.out.println("corr: " + result.correlation);
-			System.out.println("===================================");
+		System.out.println("start: " + result.startIndex);
+		System.out.println("end: " + result.endIndex);
+		System.out.println("corr: " + result.correlation);
+		System.out.println("lag: " + result.correlationLagIndex);
+		System.out.println("===================================");
 		return result;
 	}
 
