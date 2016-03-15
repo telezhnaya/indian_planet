@@ -1,24 +1,19 @@
 package com.atc.javacontest;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.math3.stat.correlation.KendallsCorrelation;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 
 import java.util.Collection;
-import java.util.Deque;
 import java.util.Iterator;
-import java.util.List;
 
-/**
- * Created by Sergey on 08.03.16.
- */
 class Correlation {
 
     static KendallsCorrelation kendallsCorrelation = new KendallsCorrelation();
     static SpearmansCorrelation spearmansCorrelation = new SpearmansCorrelation();
     static PearsonsCorrelation pearsonsCorrelation = new PearsonsCorrelation();
 
+    //данный метод считает корреляцию несколькими способами, а затем возвращает наилучший результат
     static double getCorrelation(Collection<Double> first, Collection<Double> second) {
         int size = first.size();
         double[] firstArray = new double[size];

@@ -3,9 +3,6 @@ package com.atc.javacontest;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Sergey on 15.03.16.
- */
 public class Utility {
     public static float[] toFloatArray(List<Double> list) {
         float[] array = new float[list.size()];
